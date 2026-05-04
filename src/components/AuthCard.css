@@ -1,0 +1,36 @@
+.auth-card-container {
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+}
+
+.auth-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.auth-card-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  color: #fff;
+}
+
+.auth-card-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.auth-card-subtitle {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
