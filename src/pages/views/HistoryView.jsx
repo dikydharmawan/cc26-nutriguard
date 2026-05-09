@@ -1,14 +1,9 @@
 import { Clock, Search, ChevronRight } from 'lucide-react';
+import { useAppContext } from '../../../context/AppContext';
 import './HistoryView.css';
 
 const HistoryView = () => {
-  const historyData = [
-    { id: 1, name: 'Susu UHT Full Cream', date: 'Hari ini, 08:30', cal: '150 kcal', status: 'Aman', color: '#3b7454' },
-    { id: 2, name: 'Roti Gandum Utuh', date: 'Hari ini, 07:15', cal: '120 kcal', status: 'Aman', color: '#3b7454' },
-    { id: 3, name: 'Keripik Kentang Balado', date: 'Kemarin, 19:45', cal: '320 kcal', status: 'Tinggi Natrium', color: '#9b4b45' },
-    { id: 4, name: 'Minuman Boba Brown Sugar', date: 'Kemarin, 14:20', cal: '450 kcal', status: 'Tinggi Gula', color: '#9b4b45' },
-    { id: 5, name: 'Yogurt Plain', date: '2 Hari lalu, 09:00', cal: '80 kcal', status: 'Aman', color: '#3b7454' },
-  ];
+  const { history } = useAppContext();
 
   return (
     <div className="history-view">
@@ -23,7 +18,7 @@ const HistoryView = () => {
       </div>
 
       <div className="history-list">
-        {historyData.map((item) => (
+        {history.map((item) => (
           <div key={item.id} className="history-card dashboard-card">
             <div className="history-icon">
               <Clock size={20} color="#64746b" />
@@ -43,6 +38,11 @@ const HistoryView = () => {
             </button>
           </div>
         ))}
+        {history.length === 0 && (
+          <div className="text-center text-muted mt-8">
+            Belum ada riwayat pindaian.
+          </div>
+        )}
       </div>
     </div>
   );

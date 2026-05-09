@@ -1,6 +1,9 @@
+import { useAppContext } from '../../../context/AppContext';
 import './Header.css';
 
 const Header = () => {
+  const { userProfile } = useAppContext();
+
   return (
     <header className="dashboard-header">
       <div className="header-left">
@@ -8,7 +11,7 @@ const Header = () => {
       </div>
       <div className="header-right">
         <div className="profile-avatar">
-          <img src="https://i.pravatar.cc/150?img=11" alt="Profile" />
+          <img src={userProfile.avatar} alt="Profile" />
         </div>
       </div>
     </header>
