@@ -10,7 +10,7 @@ function App() {
     <>
       {currentView === 'register' && <Register onSwitchToLogin={() => setCurrentView('login')} />}
       {currentView === 'login' && <Login onSwitchToRegister={() => setCurrentView('register')} onLoginSuccess={() => setCurrentView('dashboard')} />}
-      {currentView === 'dashboard' && <Dashboard />}
+      {currentView === 'dashboard' && <Dashboard onLogout={() => setCurrentView('login')} />}
     </>
   );
 }

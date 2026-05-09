@@ -1,0 +1,121 @@
+.scanner-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 24px;
+}
+
+.scanner-header-text {
+  text-align: center;
+}
+
+.scanner-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1c1a;
+  margin-bottom: 8px;
+}
+
+.camera-placeholder {
+  flex: 1;
+  background-color: #0f1110;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.camera-overlay-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  z-index: 2;
+}
+
+.scan-frame {
+  position: absolute;
+  width: 80%;
+  height: 70%;
+  border: 2px solid transparent;
+  z-index: 1;
+}
+
+.corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-color: #4ade80;
+  border-style: solid;
+}
+
+.top-left { top: 0; left: 0; border-width: 4px 0 0 4px; border-top-left-radius: 12px; }
+.top-right { top: 0; right: 0; border-width: 4px 4px 0 0; border-top-right-radius: 12px; }
+.bottom-left { bottom: 0; left: 0; border-width: 0 0 4px 4px; border-bottom-left-radius: 12px; }
+.bottom-right { bottom: 0; right: 0; border-width: 0 4px 4px 0; border-bottom-right-radius: 12px; }
+
+.scan-line {
+  width: 100%;
+  height: 2px;
+  background-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+  position: absolute;
+  top: 50%;
+  animation: scan 2s infinite linear alternate;
+}
+
+@keyframes scan {
+  0% { top: 5%; }
+  100% { top: 95%; }
+}
+
+.scanner-controls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.control-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1a1c1a;
+}
+
+.control-btn span {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.shutter-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 4px solid #c6f6d5;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.shutter-inner {
+  width: 54px;
+  height: 54px;
+  background-color: #264a2f;
+  border-radius: 50%;
+  transition: transform 0.1s ease;
+}
+
+.shutter-btn:active .shutter-inner {
+  transform: scale(0.9);
+}
