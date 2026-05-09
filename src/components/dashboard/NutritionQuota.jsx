@@ -1,7 +1,14 @@
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
+import { useAppContext } from '../../context/AppContext';
 import './NutritionQuota.css';
 
 const NutritionQuota = () => {
+  const { nutritionData } = useAppContext();
+  const { dailyGoal, consumed } = nutritionData;
+
+  const sugarPercent = Math.min((consumed.sugar / dailyGoal.sugar) * 100, 100);
+  const sodiumPercent = Math.min((consumed.sodium / dailyGoal.sodium) * 100, 100);
+
   return (
     <div className="dashboard-card nutrition-quota-card">
       <div className="quota-header">
@@ -15,32 +22,32 @@ const NutritionQuota = () => {
       <div className="progress-section">
         <div className="progress-header">
           <span className="nutrient-label">Gula</span>
-          <span className="nutrient-value">
-            <strong style={{color: '#264a2f'}}>12g</strong> / 50g
+          <span className="nutrient-value" style={{color: sugarPercent > 90 ? '#9b4b45' : '#264a2f', fontWeight: 700}}>
+            {consumed.sugar}g / {dailyGoal.sugar}g
           </span>
         </div>
         <div className="progress-bar-bg">
-          <div className="progress-bar-fill safe-level" style={{ width: '24%' }}></div>
+          <div className={`progress-bar-fill ${sugarPercent > 90 ? 'warning-level' : 'safe-level'}`} style={{ width: `${sugarPercent}%` }}></div>
         </div>
-        <div className="status-text safe-text">
-          <CheckCircle2 size={14} />
-          <span>Kadar aman terjaga</span>
+        <div className={`status-text ${sugarPercent > 90 ? 'warning-text' : 'safe-text'}`}>
+          {sugarPercent > 90 ? <AlertTriangle size={14} /> : <CheckCircle2 size={14} />}
+          <span>{sugarPercent > 90 ? 'Mendekati batas harian' : 'Kadar aman terjaga'}</span>
         </div>
       </div>
 
       <div className="progress-section mt-4">
         <div className="progress-header">
           <span className="nutrient-label">Garam / Natrium</span>
-          <span className="nutrient-value warning-value">
-            <strong>1.850mg</strong> / 2.000mg
+          <span className="nutrient-value" style={{color: sodiumPercent > 90 ? '#9b4b45' : '#264a2f', fontWeight: 700}}>
+            {consumed.sodium.toLocaleString('id-ID')}mg / {dailyGoal.sodium.toLocaleString('id-ID')}mg
           </span>
         </div>
         <div className="progress-bar-bg">
-          <div className="progress-bar-fill warning-level" style={{ width: '92.5%' }}></div>
+          <div className={`progress-bar-fill ${sodiumPercent > 90 ? 'warning-level' : 'safe-level'}`} style={{ width: `${sodiumPercent}%` }}></div>
         </div>
-        <div className="status-text warning-text">
-          <AlertTriangle size={14} />
-          <span>Mendekati batas harian</span>
+        <div className={`status-text ${sodiumPercent > 90 ? 'warning-text' : 'safe-text'}`}>
+          {sodiumPercent > 90 ? <AlertTriangle size={14} /> : <CheckCircle2 size={14} />}
+          <span>{sodiumPercent > 90 ? 'Mendekati batas harian' : 'Kadar aman terjaga'}</span>
         </div>
       </div>
     </div>
