@@ -22,8 +22,8 @@ const NutritionQuota = () => {
       <div className="progress-section">
         <div className="progress-header">
           <span className="nutrient-label">Gula</span>
-          <span className="nutrient-value">
-            <strong style={{color: sugarPercent > 90 ? '#9b4b45' : '#264a2f'}}>{consumed.sugar}g</strong> / {dailyGoal.sugar}g
+          <span className="nutrient-value" style={{color: sugarPercent > 90 ? '#9b4b45' : '#264a2f', fontWeight: 700}}>
+            {consumed.sugar}g / {dailyGoal.sugar}g
           </span>
         </div>
         <div className="progress-bar-bg">
@@ -38,8 +38,8 @@ const NutritionQuota = () => {
       <div className="progress-section mt-4">
         <div className="progress-header">
           <span className="nutrient-label">Garam / Natrium</span>
-          <span className="nutrient-value warning-value">
-            <strong style={{color: sodiumPercent > 90 ? '#9b4b45' : '#264a2f'}}>{consumed.sodium}mg</strong> / {dailyGoal.sodium}mg
+          <span className="nutrient-value" style={{color: sodiumPercent > 90 ? '#9b4b45' : '#264a2f', fontWeight: 700}}>
+            {consumed.sodium.toLocaleString('id-ID')}mg / {dailyGoal.sodium.toLocaleString('id-ID')}mg
           </span>
         </div>
         <div className="progress-bar-bg">
