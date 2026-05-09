@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { User, Settings, Bell, Shield, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import EditProfile from './settings/EditProfile';
 import PersonalData from './settings/PersonalData';
 import Notifications from './settings/Notifications';

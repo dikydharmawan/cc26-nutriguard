@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { useAppContext } from '../../../../context/AppContext';
+import { useAppContext } from '../../../context/AppContext';
 import './SettingsLayout.css';
 
 const EditProfile = ({ onBack }) => {

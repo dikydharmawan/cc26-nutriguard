@@ -1,5 +1,5 @@
 import { Clock, Search, ChevronRight } from 'lucide-react';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import './HistoryView.css';
 
 const HistoryView = () => {

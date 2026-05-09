@@ -1,5 +1,5 @@
 import { Utensils, Droplets } from 'lucide-react';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import './DailyAccumulation.css';
 
 const DailyAccumulation = () => {

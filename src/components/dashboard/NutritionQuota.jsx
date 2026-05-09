@@ -1,5 +1,5 @@
 import { CheckCircle2, AlertTriangle } from 'lucide-react';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import './NutritionQuota.css';
 
 const NutritionQuota = () => {
