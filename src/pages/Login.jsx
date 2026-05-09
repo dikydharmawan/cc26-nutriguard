@@ -11,14 +11,14 @@ const CircleIcon = ({ size = 24, className }) => (
   </svg>
 );
 
-const Login = ({ onSwitchToRegister }) => {
+const Login = ({ onSwitchToRegister, onLoginSuccess }) => {
   return (
     <AuthCard
       title="NutriGuard"
       subtitle="Masuk untuk melanjutkan perjalanan sehatmu"
       icon={CircleIcon}
     >
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={(e) => { e.preventDefault(); onLoginSuccess && onLoginSuccess(); }}>
         <Input
           label="Email"
           type="email"
@@ -38,7 +38,7 @@ const Login = ({ onSwitchToRegister }) => {
           />
         </div>
 
-        <Button variant="primary" className="mt-2 mb-6">
+        <Button variant="primary" className="mt-2 mb-6" onClick={() => onLoginSuccess && onLoginSuccess()}>
           Masuk
         </Button>
 
