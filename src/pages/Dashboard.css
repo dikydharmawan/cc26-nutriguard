@@ -1,14 +1,14 @@
 .dashboard-container {
   background-color: #f8fbf8;
   color: #1a1c1a;
-  min-height: 100vh;
+  height: 100%;
   width: 100%;
   max-width: 480px; /* Mobile layout constraint */
-  margin: 0 auto;
   position: relative;
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  overflow: hidden;
 }
 
 .dashboard-main {
