@@ -1,0 +1,34 @@
+.dashboard-container {
+  background-color: #f8fbf8;
+  color: #1a1c1a;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 480px; /* Mobile layout constraint */
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 0 20px 100px 20px; /* 100px bottom padding for BottomNav */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+/* Light Mode Overrides for Typography/Utility within Dashboard */
+.dashboard-container .text-muted {
+  color: #64746b;
+}
+
+/* Base card styling for dashboard components */
+.dashboard-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}

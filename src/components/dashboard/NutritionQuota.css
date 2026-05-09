@@ -1,0 +1,109 @@
+.nutrition-quota-card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.quota-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.quota-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quota-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1a1c1a;
+  margin: 0;
+}
+
+.quota-subtitle {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.quota-badge {
+  background-color: #e8f0eb;
+  color: #264a2f;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.nutrient-label {
+  font-weight: 600;
+  color: #1a1c1a;
+}
+
+.nutrient-value {
+  color: #64746b;
+  font-size: 0.875rem;
+}
+
+.nutrient-value strong {
+  font-weight: 700;
+}
+
+.warning-value strong {
+  color: #9b4b45;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease-out;
+}
+
+.safe-level {
+  background-color: #3b7454;
+}
+
+.warning-level {
+  background-color: #9b4b45;
+}
+
+.status-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.safe-text {
+  color: #3b7454;
+}
+
+.warning-text {
+  color: #9b4b45;
+}

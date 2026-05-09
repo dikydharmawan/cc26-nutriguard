@@ -1,0 +1,16 @@
+.greeting-container {
+  padding: 0 4px;
+}
+
+.greeting-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1a1c1a;
+  margin-bottom: 8px;
+}
+
+.greeting-subtitle {
+  font-size: 0.875rem;
+  margin: 0;
+}

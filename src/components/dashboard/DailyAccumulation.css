@@ -1,0 +1,63 @@
+.daily-accumulation-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accumulation-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1c1a;
+  margin: 0;
+  padding: 0 4px;
+}
+
+.accumulation-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+.stat-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calorie-icon {
+  background-color: #f0fdf4;
+  color: #264a2f;
+}
+
+.hydration-icon {
+  background-color: #f0f9ff;
+  color: #0284c7;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64746b;
+}
+
+.stat-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1c1a;
+}
