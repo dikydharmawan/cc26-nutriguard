@@ -15,14 +15,18 @@
 .dashboard-main {
   flex: 1;
   min-height: 0;
-  height: 100%;
   padding: 0 20px 100px 20px; /* 100px bottom padding for BottomNav */
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+}
+
+.dashboard-main > * {
+  margin-bottom: 24px;
+}
+
+.dashboard-main > *:last-child {
+  margin-bottom: 0;
 }
 
 /* Optional: hide scrollbar for cleaner look like native mobile app */

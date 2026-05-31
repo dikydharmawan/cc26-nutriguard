@@ -1,7 +1,7 @@
 import { Camera } from 'lucide-react';
 import './ScannerBanner.css';
 
-const ScannerBanner = () => {
+const ScannerBanner = ({ onScannerClick }) => {
   return (
     <div className="scanner-banner-card">
       <div className="banner-content">
@@ -10,7 +10,7 @@ const ScannerBanner = () => {
         <p className="banner-description">
           Dapatkan analisis instan dengan presisi tinggi untuk kandungan gula dan natrium hanya dengan memotret label informasi nilai gizi.
         </p>
-        <button className="banner-btn">
+        <button className="banner-btn" onClick={onScannerClick}>
           <Camera size={18} />
           <span>Buka Pemindai</span>
         </button>

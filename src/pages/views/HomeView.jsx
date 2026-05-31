@@ -1,15 +1,13 @@
 import Greeting from '../../components/dashboard/Greeting';
-import NutritionQuota from '../../components/dashboard/NutritionQuota';
-import DailyAccumulation from '../../components/dashboard/DailyAccumulation';
+import DashboardSummary from '../../components/dashboard/DashboardSummary';
 import ScannerBanner from '../../components/dashboard/ScannerBanner';
 
-const HomeView = () => {
+const HomeView = ({ onNavigate }) => {
   return (
     <>
       <Greeting />
-      <NutritionQuota />
-      <DailyAccumulation />
-      <ScannerBanner />
+      <DashboardSummary />
+      <ScannerBanner onScannerClick={() => onNavigate('scanner')} />
     </>
   );
 };

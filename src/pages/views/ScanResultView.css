@@ -1,0 +1,370 @@
+.scan-result-view {
+  background-color: #f8fbf8;
+  min-height: 100%;
+  padding: 16px 20px 80px 20px;
+  display: flex;
+  flex-direction: column;
+  color: #333333;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Header Styles */
+.scan-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 24px 0;
+}
+
+.scan-result-header .back-btn {
+  background: none;
+  border: none;
+  color: #264a2f;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.scan-result-header .back-btn:hover {
+  background-color: #e8f2ec;
+}
+
+.scan-result-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #264a2f;
+  margin: 0;
+  text-align: center;
+  flex-grow: 1;
+  margin-right: 8px; /* Offset back button for center alignment */
+}
+
+.status-indicator-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-indicator {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b7454;
+  background-color: #ffffff;
+}
+
+.status-icon-fill {
+  transform: rotate(-90deg); /* Make it look like a glass bottle or battery upright */
+}
+
+/* Scrollable Content */
+.scan-result-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Warning Card (Waspada) */
+.warning-card {
+  background-color: #fff8f8;
+  border: 1px solid #fee2e2;
+  border-radius: 24px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.02);
+}
+
+.warning-icon-wrapper {
+  background-color: #fee2e2;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.warning-icon {
+  color: #dc2626;
+}
+
+.warning-title {
+  color: #b91c1c;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+}
+
+.warning-desc {
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 280px;
+}
+
+.warning-desc strong {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* Nutrient Metric Cards */
+.nutrient-card {
+  background-color: #ffffff;
+  border-radius: 24px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.natrium-card {
+  border-left: 6px solid #b91c1c;
+}
+
+.sugar-card {
+  border-left: 6px solid #3b7454;
+}
+
+.nutrient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.nutrient-label-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.nutrient-icon-wrapper {
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+}
+
+.nutrient-value-container {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.nutrient-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.nutrient-unit {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.text-danger {
+  color: #b91c1c;
+}
+
+.text-safe {
+  color: #1e3a27;
+}
+
+.progress-bar-container {
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.progress-danger {
+  background-color: #b91c1c;
+}
+
+.progress-safe {
+  background-color: #3b7454;
+}
+
+.progress-info {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Saran AI Card */
+.ai-suggestion-card {
+  background-color: #3b7454;
+  border-radius: 24px;
+  padding: 20px;
+  color: #ffffff;
+  display: flex;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(59, 116, 84, 0.15);
+}
+
+.ai-icon-wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.ai-icon-bg {
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-spark-icon {
+  color: #ffffff;
+}
+
+.ai-suggestion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+}
+
+.ai-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Scanned Image Preview */
+.label-preview-card {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  background-color: #0f1110;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  max-height: 320px;
+}
+
+.label-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.label-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.label-overlay-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(26, 29, 28, 0.8);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.badge-icon {
+  color: #4ade80;
+}
+
+/* Actions Button Group */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+}
+
+.btn-save {
+  background-color: #264a2f;
+  border: none;
+  color: #ffffff;
+}
+
+.btn-save:hover {
+  background-color: #32623e;
+  transform: translateY(-1px);
+}
+
+.btn-save:active {
+  transform: translateY(1px);
+}
+
+.btn-rescan {
+  background-color: transparent;
+  border: 1px solid #c6f6d5;
+  color: #264a2f;
+}
+
+.btn-rescan:hover {
+  background-color: #f0fdf4;
+  border-color: #9ae6b4;
+  transform: translateY(-1px);
+}
+
+.btn-rescan:active {
+  transform: translateY(1px);
+}
