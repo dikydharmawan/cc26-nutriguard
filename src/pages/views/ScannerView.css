@@ -119,3 +119,38 @@
 .shutter-btn:active .shutter-inner {
   transform: scale(0.9);
 }
+
+/* Scanning loader */
+.scanning-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 24px;
+  background-color: #f8fbf8;
+  color: #264a2f;
+  min-height: 450px;
+}
+
+.spinner {
+  width: 56px;
+  height: 56px;
+  border: 5px solid #c6f6d5;
+  border-top-color: #264a2f;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+.scanning-text {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #264a2f;
+  text-align: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

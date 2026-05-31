@@ -13,9 +13,9 @@ const Dashboard = ({ onLogout }) => {
   const renderView = () => {
     switch (activeTab) {
       case 'home':
-        return <HomeView />;
+        return <HomeView onNavigate={setActiveTab} />;
       case 'scanner':
-        return <ScannerView />;
+        return <ScannerView onNavigate={setActiveTab} />;
       case 'history':
         return <HistoryView />;
       case 'profile':
