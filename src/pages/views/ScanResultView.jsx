@@ -3,8 +3,45 @@ import { useAppContext } from '../../context/AppContext';
 import nutritionLabel from '../../assets/nutrition_label.png';
 import './ScanResultView.css';
 
-const ScanResultView = ({ onBack, onSaveComplete }) => {
+const defaultScanData = {
+  productName: 'Mi Instan Goreng Premium',
+  resultStatus: 'BATASI',
+  confidence: '87.1%',
+  statusIcon: '🚫',
+  statusClass: 'status-danger-header',
+  probabilities: {
+    aman: '8.51%',
+    waspada: '4.43%',
+    batasi: '87.06%',
+    amanVal: 8.51,
+    waspadaVal: 4.43,
+    batasiVal: 87.06
+  },
+  nutrients: [
+    { key: 'energi_total_kkal', val: '380.0 kkal' },
+    { key: 'lemak_total_g', val: '15.0 g' },
+    { key: 'lemak_jenuh_g', val: '8.0 g' },
+    { key: 'lemak_trans_g', val: '0.0 g' },
+    { key: 'kolesterol_mg', val: '0.0 mg' },
+    { key: 'karbohidrat_g', val: '52.0 g' },
+    { key: 'serat_g', val: '2.0 g' },
+    { key: 'gula_g', val: '8.0 g' },
+    { key: 'protein_g', val: '8.0 g' },
+    { key: 'natrium_mg', val: '850.0 mg' }
+  ],
+  saveValues: {
+    sodium: 850,
+    sugar: 8,
+    calorie: 380
+  },
+  statusText: 'Tinggi Natrium',
+  statusColor: '#b91c1c',
+  aiSuggestion: 'Produk ini sangat tinggi Natrium. Disarankan untuk membatasi konsumsi garam pada makanan lain hari ini guna menjaga tekanan darah tetap stabil.'
+};
+
+const ScanResultView = ({ onBack, onSaveComplete, scanData, scannedImage }) => {
   const { setHistory, updateNutrition } = useAppContext();
+  const currentData = scanData || defaultScanData;
 
   const handleSave = () => {
     const timeString = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -12,20 +49,20 @@ const ScanResultView = ({ onBack, onSaveComplete }) => {
     // Add to history list
     const newItem = {
       id: Date.now(),
-      name: 'Mi Instan Goreng Premium',
+      name: currentData.productName,
       date: `Hari ini, ${timeString}`,
-      cal: '380 kcal',
-      status: 'Tinggi Natrium',
-      color: '#9b4b45'
+      cal: currentData.saveValues.calorie + ' kcal',
+      status: currentData.resultStatus,
+      color: currentData.statusColor
     };
 
     setHistory(prev => [newItem, ...prev]);
 
     // Update global consumed nutrients
     updateNutrition({
-      sodium: 850,
-      sugar: 4,
-      calorie: 380
+      sodium: currentData.saveValues.sodium,
+      sugar: currentData.saveValues.sugar,
+      calorie: currentData.saveValues.calorie
     });
 
     if (onSaveComplete) {
@@ -49,65 +86,66 @@ const ScanResultView = ({ onBack, onSaveComplete }) => {
       </div>
 
       <div className="scan-result-content">
-        {/* Waspada Warning Card */}
-        <div className="warning-card">
-          <div className="warning-icon-wrapper">
-            <AlertTriangle className="warning-icon" size={32} />
+        {/* Unified Feedback Table Card */}
+        <div className="feedback-table-card">
+          <div className="feedback-product-info">
+            <span className="product-info-label">Nama Produk:</span>
+            <span className="product-info-value">{currentData.productName}</span>
           </div>
-          <h3 className="warning-title">Waspada</h3>
-          <p className="warning-desc">
-            Produk ini memiliki kandungan yang berisiko bagi profil kesehatan <strong>Hipertensi</strong> Anda.
-          </p>
-        </div>
 
-        {/* Nutrient Metric Card 1: Natrium */}
-        <div className="nutrient-card natrium-card">
-          <div className="nutrient-header">
-            <span className="nutrient-label-title">NATRIUM</span>
-            <div className="nutrient-icon-wrapper">
-              {/* Custom Salt Shaker SVG */}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 20h12" />
-                <path d="M8 20L9 8h6l1 12" />
-                <path d="M10 8V5c0-.6.4-1 1-1h2c.6 0 1 .4 1 1v3" />
-                <path d="M11 2h2" />
-                <circle cx="10" cy="13" r="0.5" fill="currentColor" />
-                <circle cx="12" cy="13" r="0.5" fill="currentColor" />
-                <circle cx="14" cy="13" r="0.5" fill="currentColor" />
-              </svg>
+          <div className={`feedback-status-header ${currentData.statusClass || 'status-danger-header'}`}>
+            <span className="feedback-status-icon">{currentData.statusIcon}</span>
+            <span className="feedback-status-text">
+              HASIL: <span className="status-highlight">{currentData.resultStatus}</span> <span className="status-conf">(conf: {currentData.confidence})</span>
+            </span>
+          </div>
+
+          <div className="feedback-section">
+            <div className="feedback-section-title">Probabilitas :</div>
+            <div className="probability-container">
+              <div className="probability-row">
+                <span className="prob-label">Aman</span>
+                <span className="prob-colon">:</span>
+                <span className="prob-val-text">{currentData.probabilities.aman}</span>
+                <div className="prob-progress-bg">
+                  <div className="prob-progress-bar bar-green" style={{ width: currentData.probabilities.amanVal + '%' }}></div>
+                </div>
+              </div>
+              
+              <div className="probability-row">
+                <span className="prob-label">Waspada</span>
+                <span className="prob-colon">:</span>
+                <span className="prob-val-text">{currentData.probabilities.waspada}</span>
+                <div className="prob-progress-bg">
+                  <div className="prob-progress-bar bar-yellow" style={{ width: currentData.probabilities.waspadaVal + '%' }}></div>
+                </div>
+              </div>
+
+              <div className="probability-row">
+                <span className="prob-label">Batasi</span>
+                <span className="prob-colon">:</span>
+                <span className="prob-val-text">{currentData.probabilities.batasi}</span>
+                <div className="prob-progress-bg">
+                  <div className="prob-progress-bar bar-red" style={{ width: currentData.probabilities.batasiVal + '%' }}></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="nutrient-value-container">
-            <span className="nutrient-value text-danger">850</span>
-            <span className="nutrient-unit text-danger">mg</span>
-          </div>
-          <div className="progress-bar-container">
-            <div className="progress-bar progress-danger" style={{ width: '85%' }}></div>
-          </div>
-          <span className="progress-info text-danger">85% dari batas harian Anda</span>
-        </div>
 
-        {/* Nutrient Metric Card 2: Gula */}
-        <div className="nutrient-card sugar-card">
-          <div className="nutrient-header">
-            <span className="nutrient-label-title">GULA</span>
-            <div className="nutrient-icon-wrapper">
-              {/* Custom Sugar Cube SVG */}
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="8" height="8" rx="1" />
-                <rect x="13" y="11" width="8" height="8" rx="1" />
-                <rect x="8" y="3" width="8" height="8" rx="1" />
-              </svg>
+          <div className="feedback-section">
+            <div className="feedback-section-title">Nutrisi terdeteksi:</div>
+            <div className="nutrients-list">
+              {currentData.nutrients.map((nutr, index) => (
+                <div className="nutrient-row-item" key={index}>
+                  <span className="nutr-key">{nutr.key}</span>
+                  <span className="nutr-colon">:</span>
+                  <span className={`nutr-val ${nutr.isMuted ? 'text-muted' : ''} ${nutr.isItalic ? 'italic' : ''}`}>
+                    {nutr.val}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="nutrient-value-container">
-            <span className="nutrient-value text-safe">4</span>
-            <span className="nutrient-unit text-safe">g</span>
-          </div>
-          <div className="progress-bar-container">
-            <div className="progress-bar progress-safe" style={{ width: '15%' }}></div>
-          </div>
-          <span className="progress-info text-safe">Aman: 15% dari batas harian</span>
         </div>
 
         {/* Saran NutriGuard AI Card */}
@@ -120,7 +158,7 @@ const ScanResultView = ({ onBack, onSaveComplete }) => {
           <div className="ai-suggestion-content">
             <h4 className="ai-title">Saran NutriGuard AI</h4>
             <p className="ai-desc">
-              Produk ini sangat tinggi Natrium. Disarankan untuk membatasi konsumsi garam pada makanan lain hari ini guna menjaga tekanan darah tetap stabil.
+              {currentData.aiSuggestion}
             </p>
           </div>
         </div>
@@ -128,7 +166,7 @@ const ScanResultView = ({ onBack, onSaveComplete }) => {
         {/* Scanned Image Preview Card */}
         <div className="label-preview-card">
           <div className="label-image-wrapper">
-            <img src={nutritionLabel} alt="Scanned Food Label" className="label-image" />
+            <img src={scannedImage || nutritionLabel} alt="Scanned Food Label" className="label-image" />
             <div className="label-overlay-badge">
               <CheckCircle2 size={16} className="badge-icon" />
               <span>Label Terdeteksi Otomatis</span>
