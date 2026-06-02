@@ -34,3 +34,6 @@ client/.env
 *.njsproj
 *.sln
 *.sw?
+
+# Python environment
+.venv

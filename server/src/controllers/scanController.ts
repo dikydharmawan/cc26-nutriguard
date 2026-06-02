@@ -1,8 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
-import { processImageScan } from "../services/scanService";
-import { Predictor } from "../types";
-import { prisma } from "../db/client";
 
 export const handleScan = async (
   req: Request,
@@ -10,38 +6,84 @@ export const handleScan = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // userId attached by authenticate middleware
-    const userId = req.user!.id;
-    const predictor: Predictor = req.app.locals.predictor;
+    // 1. Tangkap string Base64 gambar dari request body (dari frontend)
+    // Jika lewat multer (upload.single), ambil dari buffer
+    let base64Image: string | undefined;
 
-    // support both file upload and url
-    let imageBuffer: Buffer;
-    let imageUrl: string | undefined;
-
-    if (req.file) {
-      imageBuffer = req.file.buffer;
-    } else if (req.body.imageUrl) {
-      // fetch remote image (basic fetch here)
-      const resp = await fetch(req.body.imageUrl as string);
-      imageBuffer = Buffer.from(await resp.arrayBuffer());
-      imageUrl = req.body.imageUrl as string;
+    if (req.body.image) {
+      base64Image = req.body.image;
+    } else if (req.file) {
+      base64Image = req.file.buffer.toString("base64");
     } else {
-      res.status(400).json({ error: "Provide an image file or imageUrl" });
+      res.status(400).json({ error: "Provide an image as base64 string in body or as a file" });
       return;
     }
 
-    const log = await processImageScan({
-      prisma,
-      predictor,
-      userId,
-      imageBuffer,
-      imageUrl,
+    // 2. Teruskan string Base64 ke server FastAPI
+    const aiResponse = await fetch("http://localhost:8000/api/v1/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image: base64Image }),
     });
-    res.status(201).json({
-      logId: log.id,
-      nutrition: log.nutrition,
-      confidence: log.confidence,
-    });
+
+    if (!aiResponse.ok) {
+      const errorText = await aiResponse.text();
+      res.status(aiResponse.status).json({ error: "AI Server Error", details: errorText });
+      return;
+    }
+
+    const aiData = await aiResponse.json();
+
+    // Cek apakah OCR gagal menemukan teks
+    if (aiData.isValid === false) {
+      res.status(200).json({ isValid: false });
+      return;
+    }
+
+    // 3. Cocokkan dan lengkapi data sesuai API Contract
+    const resultStatus = aiData.resultStatus || "AMAN";
+    let statusIcon = "✅";
+    let statusClass = "status-safe-header";
+    let aiSuggestion = "Produk ini terpantau aman untuk dikonsumsi harian Anda.";
+
+    if (resultStatus === "WASPADA") {
+      statusIcon = "⚠️";
+      statusClass = "status-warning-header";
+      aiSuggestion = "Perhatikan asupan Anda, produk ini memiliki kandungan yang perlu diwaspadai.";
+    } else if (resultStatus === "BATASI") {
+      statusIcon = "🚫";
+      statusClass = "status-danger-header";
+      aiSuggestion = "Sebaiknya batasi konsumsi produk ini karena kandungan gizi tertentu cukup tinggi.";
+    }
+
+    // Cari persentase tebakan tertinggi
+    let confidenceStr = "0%";
+    let maxProb = 0;
+    const probs = aiData.probabilities || {};
+    for (const key in probs) {
+      const val = parseInt(probs[key].replace("%", ""), 10);
+      if (val > maxProb) {
+        maxProb = val;
+        confidenceStr = probs[key];
+      }
+    }
+
+    const finalResponse = {
+      isValid: true,
+      productName: "Produk Hasil Scan", // Fallback default
+      resultStatus: resultStatus,
+      confidence: confidenceStr,
+      statusIcon: statusIcon,
+      statusClass: statusClass,
+      probabilities: aiData.probabilities,
+      nutrients: aiData.nutrients,
+      aiSuggestion: aiSuggestion,
+      saveValues: aiData.saveValues
+    };
+
+    res.status(200).json(finalResponse);
   } catch (err) {
     next(err);
   }
