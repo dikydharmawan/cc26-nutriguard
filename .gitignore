@@ -37,3 +37,6 @@ client/.env
 *.sw?
 
 .direnv/
+
+# Python environment
+.venv
