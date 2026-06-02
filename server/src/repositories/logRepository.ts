@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../generated/prisma/client";
 import { FoodLogRecord } from "../types";
 
 export type CreateLogInput = Omit<FoodLogRecord, "id" | "createdAt">;

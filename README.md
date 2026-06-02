@@ -40,48 +40,22 @@ Dibangun dengan **Node.js** dan **Express**. Endpoint `/api/scan` akan diimpleme
 ### Cara Menjalankan
 
 ```bash
+# seperti biasa
 cd server
 npm install
-npm start        # production
-npm run dev      # development (nodemon)
-```
+cp .env.example .env # isi yang perlu
 
-### Environment Variables
+# migration
+npm run prisma:migrate
+npm run prisma:generate
+npm run prisma:seed # opsional
 
-Salin `.env.example` ke `.env` dan isi sesuai kebutuhan:
-
-```bash
-cp server/.env.example server/.env
+# finally akhirnya
+npm run dev
 ```
 
 ---
 
-## API Contract
+## API Docs
 
-### `POST /api/scan`
-
-**Request:**
-```json
-{ "image": "<base64 string>" }
-```
-
-**Response (valid):**
-```json
-{
-  "isValid": true,
-  "productName": "Nama Produk",
-  "resultStatus": "AMAN | WASPADA | BATASI",
-  "confidence": "91.3%",
-  "statusIcon": "✅ | ⚠️ | 🚫",
-  "statusClass": "status-safe-header | status-warning-header | status-danger-header",
-  "probabilities": { "aman": "91%", "waspada": "5%", "batasi": "4%" },
-  "nutrients": [{ "key": "energi_total_kkal", "val": "380 kkal" }],
-  "aiSuggestion": "Teks saran dari AI...",
-  "saveValues": { "sodium": 120, "sugar": 5, "calorie": 380 }
-}
-```
-
-**Response (tidak valid):**
-```json
-{ "isValid": false }
-```
+Swagger: `/api/docs`

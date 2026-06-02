@@ -1,7 +1,8 @@
 allowBuilds:
-  '@prisma/engines': set this to true or false
-  '@scarf/scarf': set this to true or false
-  '@tensorflow/tfjs-node': set this to true or false
-  argon2: set this to true or false
-  core-js: set this to true or false
-  prisma: set this to true or false
+  '@prisma/engines': true
+  '@scarf/scarf': false
+  '@tensorflow/tfjs-node': false
+  argon2: false
+  core-js: false
+  esbuild: set this to true or false
+  prisma: true

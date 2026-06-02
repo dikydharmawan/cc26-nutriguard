@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import yaml from "yaml";
 import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
 
 import { env } from "./config/env";
 import { errorHandler } from "./middlewares/errorHandler";
@@ -24,10 +25,7 @@ async function bootstrap() {
   app.locals.predictor = predictor;
 
   // swagger at /api/docs
-  const openapiDoc = yaml.parse(
-    fs.readFileSync(path.join(__dirname, "../docs/openapi.yaml"), "utf8"),
-  );
-  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   // routes
   app.use("/api", router);

@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
 import { processImageScan } from "../services/scanService";
 import { Predictor } from "../types";
 import { prisma } from "../db/client";

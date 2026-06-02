@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../generated/prisma/client";
 import { Predictor, FoodLogRecord } from "../types";
 import * as logRepo from "../repositories/logRepository";
 
