@@ -1,0 +1,250 @@
+openapi: "3.0.3"
+info:
+  title: NutriGuard API
+  version: "1.0.0"
+  description: >
+    API for NutriGuard
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local dev
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Credentials:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+
+    AuthTokens:
+      type: object
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+
+    NormalizedNutrition:
+      type: object
+      properties:
+        servingSize: { type: string }
+        calories: { type: number }
+        totalFat: { type: number }
+        saturatedFat: { type: number }
+        transFat: { type: number }
+        cholesterol: { type: number }
+        sodium: { type: number }
+        totalCarbs: { type: number }
+        dietaryFiber: { type: number }
+        totalSugars: { type: number }
+        protein: { type: number }
+        vitamins:
+          type: object
+          additionalProperties: { type: number }
+
+    DetectedItem:
+      type: object
+      properties:
+        label: { type: string }
+        confidence: { type: number }
+        boundingBox:
+          type: object
+          properties:
+            x: { type: number }
+            y: { type: number }
+            w: { type: number }
+            h: { type: number }
+
+    ScanResponse:
+      type: object
+      properties:
+        logId: { type: string, format: uuid }
+        confidence: { type: number }
+        nutrition: { $ref: "#/components/schemas/NormalizedNutrition" }
+
+    FoodLog:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        userId: { type: string, format: uuid }
+        imageUrl: { type: string, nullable: true }
+        detected:
+          type: array
+          items: { $ref: "#/components/schemas/DetectedItem" }
+        nutrition: { $ref: "#/components/schemas/NormalizedNutrition" }
+        confidence: { type: number }
+        modelVersion: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    PaginatedLogs:
+      type: object
+      properties:
+        data:
+          type: array
+          items: { $ref: "#/components/schemas/FoodLog" }
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Credentials" }
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  email: { type: string }
+        "409": { description: Email already registered }
+        "422": { description: Validation error }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate and receive tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Credentials" }
+      responses:
+        "200":
+          description: Tokens issued
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthTokens" }
+        "401": { description: Invalid credentials }
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Exchange refresh token for new token pair
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken: { type: string }
+      responses:
+        "200":
+          description: New tokens
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthTokens" }
+        "401": { description: Invalid refresh token }
+
+  /scan:
+    post:
+      tags: [Scan]
+      summary: Upload nutrition label image and receive ML prediction
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: JPEG/PNG of nutrition label (max 10 MB)
+          application/json:
+            schema:
+              type: object
+              required: [imageUrl]
+              properties:
+                imageUrl:
+                  type: string
+                  format: uri
+                  description: Remote image URL (alternative to file upload)
+      responses:
+        "201":
+          description: Prediction result + saved log id
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ScanResponse" }
+        "400": { description: No image provided }
+        "401": { description: Unauthorized }
+
+  /logs:
+    get:
+      tags: [Logs]
+      summary: Paginated scan history for the authenticated user
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: pageSize
+          schema: { type: integer, default: 20 }
+      responses:
+        "200":
+          description: Paginated log list
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PaginatedLogs" }
+        "401": { description: Unauthorized }
+
+  /logs/{id}:
+    get:
+      tags: [Logs]
+      summary: Get a single food log by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Food log
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/FoodLog" }
+        "404": { description: Log not found }
+        "401": { description: Unauthorized }
+
+    delete:
+      tags: [Logs]
+      summary: Delete a food log
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "204": { description: Deleted }
+        "404": { description: Log not found }
+        "401": { description: Unauthorized }
