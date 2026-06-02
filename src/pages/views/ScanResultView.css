@@ -458,3 +458,47 @@
 .status-safe-header .status-conf {
   color: #10b981;
 }
+
+/* Editable inputs styling */
+.product-info-input {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-info-input:focus {
+  border-color: #264a2f;
+  box-shadow: 0 0 0 2px rgba(38, 74, 47, 0.1);
+}
+
+.nutrient-input {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f2937;
+  outline: none;
+  box-sizing: border-box;
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nutrient-input:focus {
+  border-color: #264a2f;
+  box-shadow: 0 0 0 2px rgba(38, 74, 47, 0.1);
+}
+
+.nutrient-input::placeholder {
+  font-weight: 400;
+  color: #94a3b8;
+}
