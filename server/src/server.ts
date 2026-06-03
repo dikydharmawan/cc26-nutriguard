@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import fs from "fs";
 import path from "path";
 import yaml from "yaml";
@@ -19,6 +20,7 @@ async function bootstrap() {
   );
 
   const app = express();
+  app.use(cors());
   app.use(express.json());
 
   // attach predictor so controllers can receive it via dependency injection

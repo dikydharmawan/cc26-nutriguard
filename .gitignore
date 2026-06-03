@@ -40,3 +40,6 @@ client/.env
 
 # Python environment
 .venv
+
+# SQLite databases
+*.db
