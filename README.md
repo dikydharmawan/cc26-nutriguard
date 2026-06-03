@@ -1,16 +1,61 @@
-# React + Vite
+# NutriGuard 🥗
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplikasi pemindai label informasi nilai gizi berbasis AI untuk membantu pengguna membuat keputusan konsumsi yang lebih sehat.
 
-Currently, two official plugins are available:
+## Struktur Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+NutriGuard/
+├── client/     ← Frontend (React + Vite)
+└── server/     ← Backend (Node.js + Express) — dikerjakan tim DSBE & AI
+```
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Client (Frontend)
 
-## Expanding the ESLint configuration
+Dibangun dengan **React** dan **Vite**.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Cara Menjalankan
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Cara Build
+
+```bash
+cd client
+npm run build
+```
+
+---
+
+## Server (Backend)
+
+Dibangun dengan **Node.js** dan **Express**. Endpoint `/api/scan` akan diimplementasikan oleh tim Data Science & AI.
+
+### Cara Menjalankan
+
+```bash
+# seperti biasa
+cd server
+npm install
+cp .env.example .env # isi yang perlu
+
+# migration
+npm run prisma:migrate
+npm run prisma:generate
+npm run prisma:seed # opsional
+
+# finally akhirnya
+npm run dev
+```
+
+---
+
+## API Docs
+
+Swagger: `/api/docs`
