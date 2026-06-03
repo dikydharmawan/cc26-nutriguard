@@ -1,25 +1,46 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [userProfile, setUserProfile] = useState({
-    name: 'Diky Dharmawan',
-    email: 'diky@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=11',
-    age: 25,
-    gender: 'Laki-laki',
-    weight: 70,
-    height: 175
+  const [userProfile, setUserProfile] = useState(() => {
+    const saved = localStorage.getItem('userProfile');
+    return saved ? JSON.parse(saved) : {
+      name: 'Diky Dharmawan',
+      email: 'diky@example.com',
+      avatar: 'https://i.pravatar.cc/150?img=11',
+      age: 25,
+      gender: 'Laki-laki',
+      weight: 70,
+      height: 175
+    };
   });
 
-  const [nutritionData, setNutritionData] = useState({
-    dailyGoal: { calorie: 2200, sugar: 50, sodium: 2000, hydration: 2.5 },
-    consumed: { calorie: 0, sugar: 0, sodium: 0, hydration: 0 }
+  const [nutritionData, setNutritionData] = useState(() => {
+    const saved = localStorage.getItem('nutritionData');
+    return saved ? JSON.parse(saved) : {
+      dailyGoal: { calorie: 2200, sugar: 50, sodium: 2000, hydration: 2.5 },
+      consumed: { calorie: 0, sugar: 0, sodium: 0, hydration: 0 }
+    };
   });
 
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem('scanHistory');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+  }, [userProfile]);
+
+  useEffect(() => {
+    localStorage.setItem('nutritionData', JSON.stringify(nutritionData));
+  }, [nutritionData]);
+
+  useEffect(() => {
+    localStorage.setItem('scanHistory', JSON.stringify(history));
+  }, [history]);
 
   const updateProfile = (newData) => {
     setUserProfile(prev => ({ ...prev, ...newData }));
