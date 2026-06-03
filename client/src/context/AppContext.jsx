@@ -20,10 +20,20 @@ export const AppProvider = ({ children }) => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       setIsAuthenticated(true);
-      setUserProfile({
-        name: 'Pengguna NutriGuard',
-        email: 'user'
-      });
+      const savedProfile = localStorage.getItem('userProfile');
+      if (savedProfile) {
+        setUserProfile(JSON.parse(savedProfile));
+      } else {
+        setUserProfile({
+          name: 'Diky Dharmawan',
+          email: 'diky@example.com',
+          avatar: 'https://i.pravatar.cc/150?img=11',
+          age: 25,
+          gender: 'Laki-laki',
+          weight: 70,
+          height: 175
+        });
+      }
       fetchHistory();
     } else {
       setIsAuthenticated(false);
@@ -37,7 +47,21 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
     setIsAuthenticated(true);
-    setUserProfile({ name: 'Pengguna NutriGuard', email });
+    
+    // Check if there is already a saved profile for this email, otherwise set default
+    const savedProfile = localStorage.getItem('userProfile');
+    const profile = savedProfile ? JSON.parse(savedProfile) : {
+      name: 'Diky Dharmawan',
+      email,
+      avatar: 'https://i.pravatar.cc/150?img=11',
+      age: 25,
+      gender: 'Laki-laki',
+      weight: 70,
+      height: 175
+    };
+    setUserProfile(profile);
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+
     await fetchHistory();
   };
 
@@ -48,6 +72,7 @@ export const AppProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userProfile');
     setIsAuthenticated(false);
     setUserProfile(null);
     setHistory([]);
@@ -87,7 +112,11 @@ export const AppProvider = ({ children }) => {
   };
 
   const updateProfile = (newData) => {
-    setUserProfile(prev => ({ ...prev, ...newData }));
+    setUserProfile(prev => {
+      const updated = { ...prev, ...newData };
+      localStorage.setItem('userProfile', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const updateNutrition = (newData) => {
