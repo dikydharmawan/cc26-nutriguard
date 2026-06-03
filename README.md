@@ -44,7 +44,7 @@ npm run dev
 **Terminal 3 (AI):**
 ```bash
 cd ai
-.venv\Scripts\activate #masuk .venv
+.\.venv\Scripts\Activate #masuk .venv
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -99,7 +99,7 @@ cd ai
 python -m venv .venv 
 
 # jika sudah ada .venv nya, langsung masuk aja pake ini
-.venv\Scripts\activate
+.\.venv\Scripts\Activate
 
 # install dependency jika belum
 pip install -r requirements.txt

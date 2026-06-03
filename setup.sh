@@ -66,7 +66,7 @@ echo -e "\n${YELLOW}[5/5] Setting up AI...${NC}"
 echo "Creating AI virtual environment..."
 cd ai && python -m venv .venv
 echo "Activating AI virtual environment..."
-.venv\Scripts\activate
+.\.venv\Scripts\Activate
 echo "Installing AI dependencies..."
 pip install -r requirements.txt
 cd ..
@@ -75,5 +75,5 @@ echo -e "\n${GREEN}=== Setup Complete! ===${NC}"
 echo -e "To start the development servers, run these commands in separate terminals:"
 echo -e "  - Frontend: ${YELLOW}cd client && npm run dev${NC}"
 echo -e "  - Backend:  ${YELLOW}cd server && npm run dev${NC}"
-echo -e "  - AI:       ${YELLOW}cd ai && .venv\Scripts\activate && uvicorn main:app --reload${NC}"
+echo -e "  - AI:       ${YELLOW}cd ai && .\.venv\Scripts\Activate && uvicorn main:app --reload${NC}"
 echo -e "\nSelamat berkarya bersama tim NutriGuard! 🚀"
