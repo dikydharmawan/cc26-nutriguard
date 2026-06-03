@@ -7,7 +7,8 @@ Aplikasi pemindai label informasi nilai gizi berbasis AI untuk membantu pengguna
 ```
 NutriGuard/
 ├── client/     ← Frontend (React + Vite)
-└── server/     ← Backend (Node.js + Express) — dikerjakan tim DSBE & AI
+├── server/     ← Backend (Node.js + Express)
+└── ai/         ← Backend (Python + FastAPI)
 ```
 
 ---
@@ -26,7 +27,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-Setelah proses setup selesai, Anda tinggal menjalankan frontend dan backend di **dua terminal yang berbeda**:
+Setelah proses setup selesai, Anda tinggal menjalankan frontend, backend, dan ai di **tiga terminal yang berbeda**:
 
 **Terminal 1 (Frontend):**
 ```bash
@@ -38,6 +39,13 @@ npm run dev
 ```bash
 cd server
 npm run dev
+```
+
+**Terminal 3 (AI):**
+```bash
+cd ai
+.venv\Scripts\activate #masuk .venv
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ---
@@ -81,6 +89,23 @@ npm run prisma:seed # opsional
 
 # finally akhirnya
 npm run dev
+```
+
+### Server (AI)
+
+```bash
+cd ai
+# buat .venv dulu jika belum ada
+python -m venv .venv 
+
+# jika sudah ada .venv nya, langsung masuk aja pake ini
+.venv\Scripts\activate
+
+# install dependency jika belum
+pip install -r requirements.txt
+
+#run
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ---

@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 echo -e "${GREEN}=== NutriGuard Team Setup Script ===${NC}\n"
 
 # 1. Setup Environment Files
-echo -e "${YELLOW}[1/4] Setting up environment files...${NC}"
+echo -e "${YELLOW}[1/5] Setting up environment files...${NC}"
 if [ -f "client/.env" ]; then
     echo "client/.env already exists."
 else
@@ -33,7 +33,7 @@ else
 fi
 
 # 2. Install Dependencies
-echo -e "\n${YELLOW}[2/4] Installing dependencies...${NC}"
+echo -e "\n${YELLOW}[2/5] Installing dependencies...${NC}"
 echo "Installing client dependencies..."
 cd client && npm install
 cd ..
@@ -43,11 +43,11 @@ cd server && npm install
 cd ..
 
 # 3. Setup Database Schema
-echo -e "\n${YELLOW}[3/4] Running Prisma generate...${NC}"
+echo -e "\n${YELLOW}[3/5] Running Prisma generate...${NC}"
 cd server
 npx prisma generate
 
-echo -e "\n${YELLOW}[4/4] Syncing database schema...${NC}"
+echo -e "\n${YELLOW}[4/5] Syncing database schema...${NC}"
 echo -e "Attempting to push schema to PostgreSQL. (Make sure PostgreSQL is running)"
 npx prisma db push
 
@@ -61,8 +61,19 @@ fi
 
 cd ..
 
+# 5. Setup AI
+echo -e "\n${YELLOW}[5/5] Setting up AI...${NC}"
+echo "Creating AI virtual environment..."
+cd ai && python -m venv .venv
+echo "Activating AI virtual environment..."
+.venv\Scripts\activate
+echo "Installing AI dependencies..."
+pip install -r requirements.txt
+cd ..
+
 echo -e "\n${GREEN}=== Setup Complete! ===${NC}"
 echo -e "To start the development servers, run these commands in separate terminals:"
 echo -e "  - Frontend: ${YELLOW}cd client && npm run dev${NC}"
 echo -e "  - Backend:  ${YELLOW}cd server && npm run dev${NC}"
+echo -e "  - AI:       ${YELLOW}cd ai && .venv\Scripts\activate && uvicorn main:app --reload${NC}"
 echo -e "\nSelamat berkarya bersama tim NutriGuard! 🚀"

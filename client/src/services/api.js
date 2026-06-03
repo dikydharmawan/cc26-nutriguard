@@ -47,7 +47,7 @@ api.interceptors.response.use(
 
         if (res.status === 200) {
           const { accessToken, refreshToken: newRefreshToken } = res.data;
-          
+
           // Save new tokens
           localStorage.setItem('accessToken', accessToken);
           if (newRefreshToken) {
@@ -62,9 +62,9 @@ api.interceptors.response.use(
         // Refresh token expired or invalid, log out the user
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        
+
         // This will force the app to go back to the login screen
-        window.location.href = '/'; 
+        window.location.href = '/';
         return Promise.reject(refreshError);
       }
     }

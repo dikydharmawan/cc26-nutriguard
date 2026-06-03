@@ -61,7 +61,8 @@ class ScanRequest(BaseModel):
 
 # Global variables
 model = None
-scaler = None
+scaler_mean = None
+scaler_scale = None
 median_imputation = None
 reader = None
 
@@ -74,7 +75,7 @@ CATEGORIES = ['Aman', 'Waspada', 'Batasi']
 
 @app.on_event("startup")
 async def startup_event():
-    global model, scaler, median_imputation, reader
+    global model, scaler_mean, scaler_scale, median_imputation, reader
     try:
         # Load EasyOCR
         reader = easyocr.Reader(['id', 'en'], gpu=False)
@@ -85,12 +86,10 @@ async def startup_event():
         meta_path = os.path.join(base_dir, 'nutriguard_meta.pkl')
         with open(meta_path, 'rb') as f:
             metadata = pickle.load(f)
-            if isinstance(metadata, dict):
-                scaler = metadata.get('scaler')
-                median_imputation = metadata.get('median_imputation')
-            elif isinstance(metadata, (tuple, list)):
-                scaler = metadata[0]
-                median_imputation = metadata[1]
+            # Metadata di-load sebagai dictionary mentah dari tim modelling
+            median_imputation = metadata.get('medians', {})
+            scaler_mean = metadata.get('scaler_mean', [])
+            scaler_scale = metadata.get('scaler_scale', [])
         
         # Load Model .keras dengan custom_objects yang benar
         model_path = os.path.join(base_dir, 'nutriguard.keras')
@@ -167,8 +166,10 @@ async def predict(request: ScanRequest):
             
         feature_array = np.array(feature_array).reshape(1, -1)
         
-        # 4. Normalisasi data dengan Scaler
-        normalized_features = scaler.transform(feature_array)
+        # 4. Normalisasi data dengan Scaler (Manual dari Mean dan Scale)
+        mean_arr = np.array(scaler_mean)
+        scale_arr = np.array(scaler_scale)
+        normalized_features = (feature_array - mean_arr) / scale_arr
         
         # 5. Prediksi Kategori Kesehatan
         predictions = model.predict(normalized_features)
@@ -198,4 +199,6 @@ async def predict(request: ScanRequest):
     except ValueError as ve:
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+        import traceback
+        tb_str = traceback.format_exc()
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}\n{tb_str}")
