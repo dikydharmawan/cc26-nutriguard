@@ -18,26 +18,34 @@ const HistoryView = () => {
       </div>
 
       <div className="history-list">
-        {history.map((item) => (
-          <div key={item.id} className="history-card dashboard-card">
-            <div className="history-icon">
-              <Clock size={20} color="#64746b" />
-            </div>
-            <div className="history-details">
-              <h4 className="food-name">{item.name}</h4>
-              <span className="scan-date">{item.date}</span>
-              <div className="nutrition-badges">
-                <span className="cal-badge">{item.cal}</span>
-                <span className="status-badge" style={{ color: item.color, backgroundColor: `${item.color}15` }}>
-                  {item.status}
-                </span>
+        {history.map((item) => {
+          const name = item.detected?.productName || item.name || 'Produk';
+          const date = new Date(item.createdAt || item.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+          const cal = item.nutrition?.calorie || item.cal || '-';
+          const status = item.detected?.resultStatus || item.status || 'OK';
+          const color = item.detected?.statusColor || item.color || '#64746b';
+          
+          return (
+            <div key={item.id} className="history-card dashboard-card">
+              <div className="history-icon">
+                <Clock size={20} color="#64746b" />
               </div>
+              <div className="history-details">
+                <h4 className="food-name">{name}</h4>
+                <span className="scan-date">{date}</span>
+                <div className="nutrition-badges">
+                  <span className="cal-badge">{cal} kkal</span>
+                  <span className="status-badge" style={{ color: color, backgroundColor: `${color}15` }}>
+                    {status}
+                  </span>
+                </div>
+              </div>
+              <button className="view-detail-btn">
+                <ChevronRight size={20} />
+              </button>
             </div>
-            <button className="view-detail-btn">
-              <ChevronRight size={20} />
-            </button>
-          </div>
-        ))}
+          );
+        })}
         {history.length === 0 && (
           <div className="text-center text-muted mt-8">
             Belum ada riwayat pindaian.

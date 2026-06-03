@@ -1,4 +1,5 @@
-
+import { useState } from 'react';
+import { useAppContext } from '../context/AppContext';
 import { Mail, Lock, ShieldCheck } from 'lucide-react';
 import AuthCard from '../components/AuthCard';
 import Input from '../components/Input';
@@ -11,19 +12,44 @@ const CircleIcon = ({ size = 24, className }) => (
   </svg>
 );
 
-const Login = ({ onSwitchToRegister, onLoginSuccess }) => {
+const Login = ({ onSwitchToRegister }) => {
+  const { login } = useAppContext();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !password) return;
+    setError('');
+    setLoading(true);
+    try {
+      await login(email, password);
+      // App.jsx will automatically route to dashboard because isAuthenticated becomes true
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login gagal. Periksa email dan kata sandi Anda.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AuthCard
       title="NutriGuard"
       subtitle="Masuk untuk melanjutkan perjalanan sehatmu"
       icon={CircleIcon}
     >
-      <form onSubmit={(e) => { e.preventDefault(); onLoginSuccess && onLoginSuccess(); }}>
+      <form onSubmit={handleSubmit}>
+        {error && <div style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.875rem', textAlign: 'center' }}>{error}</div>}
         <Input
           label="Email"
           type="email"
           placeholder="nama@email.com"
           icon={Mail}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         
         <div style={{ position: 'relative' }}>
@@ -35,11 +61,14 @@ const Login = ({ onSwitchToRegister, onLoginSuccess }) => {
             type="password"
             placeholder="••••••••"
             icon={Lock}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
 
-        <Button variant="primary" className="mt-2 mb-6" onClick={() => onLoginSuccess && onLoginSuccess()}>
-          Masuk
+        <Button variant="primary" className="mt-2 mb-6" type="submit" disabled={loading}>
+          {loading ? 'Memproses...' : 'Masuk'}
         </Button>
 
         <div className="divider">
