@@ -20,11 +20,16 @@ function App() {
     return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Memuat...</div>;
   }
 
+  const handleLogout = () => {
+    logout();
+    setCurrentView('login');
+  };
+
   return (
     <>
       {currentView === 'register' && !isAuthenticated && <Register onSwitchToLogin={() => setCurrentView('login')} />}
       {currentView === 'login' && !isAuthenticated && <Login onSwitchToRegister={() => setCurrentView('register')} />}
-      {currentView === 'dashboard' && isAuthenticated && <Dashboard onLogout={logout} />}
+      {currentView === 'dashboard' && isAuthenticated && <Dashboard onLogout={handleLogout} />}
     </>
   );
 }
