@@ -39,15 +39,21 @@ export const AppProvider = ({ children }) => {
       const savedProfile = localStorage.getItem('userProfile');
       if (savedProfile && savedProfile !== 'undefined' && savedProfile !== 'null') {
         try {
-          setUserProfile(JSON.parse(savedProfile));
+          const parsed = JSON.parse(savedProfile);
+          if (parsed && (parsed.name === 'Diky Dharmawan' || parsed.name === 'Pengguna')) {
+            parsed.name = 'Sobat Sehat';
+            parsed.avatar = 'https://ui-avatars.com/api/?name=Sobat+Sehat&background=random';
+            localStorage.setItem('userProfile', JSON.stringify(parsed));
+          }
+          setUserProfile(parsed);
         } catch (e) {
           console.error("Error parsing user profile from localStorage", e);
         }
       } else {
         setUserProfile({
-          name: 'Pengguna',
+          name: 'Sobat Sehat',
           email: 'user@example.com',
-          avatar: 'https://ui-avatars.com/api/?name=Pengguna&background=random',
+          avatar: 'https://ui-avatars.com/api/?name=Sobat+Sehat&background=random',
           age: 25,
           gender: 'Laki-laki',
           weight: 70,
@@ -69,14 +75,14 @@ export const AppProvider = ({ children }) => {
     setIsAuthenticated(true);
     
     const storedName = localStorage.getItem(`userName_${email}`);
-    const defaultName = storedName || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const defaultName = storedName || 'Sobat Sehat';
 
     // Check if there is already a saved profile for this email, otherwise set default
     const savedProfile = localStorage.getItem('userProfile');
     let profile = savedProfile ? JSON.parse(savedProfile) : null;
     
     // If no profile or profile belongs to a different email, create a new one
-    if (!profile || profile.email !== email) {
+    if (!profile || profile.email !== email || profile.name === 'Diky Dharmawan' || profile.name === 'Pengguna') {
       profile = {
         name: defaultName,
         email,
