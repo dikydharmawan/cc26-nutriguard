@@ -7,7 +7,7 @@ const defaultScanData = {
   isValid: false
 };
 
-const ScanResultView = ({ onBack, onSaveComplete, scanData, scannedImage }) => {
+const ScanResultView = ({ onBack, onSaveComplete, scanData, scannedImage, isViewOnly }) => {
   const { setHistory, updateNutrition } = useAppContext();
   const baseData = scanData || defaultScanData;
 
@@ -20,7 +20,9 @@ const ScanResultView = ({ onBack, onSaveComplete, scanData, scannedImage }) => {
       date: `Hari ini, ${timeString}`,
       cal: `${baseData.saveValues?.calorie || 0} kcal`,
       status: baseData.resultStatus,
-      color: baseData.statusColor
+      color: baseData.statusColor,
+      fullData: baseData,
+      image: scannedImage
     };
 
     setHistory(prev => [newItem, ...prev]);
@@ -185,17 +187,19 @@ const ScanResultView = ({ onBack, onSaveComplete, scanData, scannedImage }) => {
           </div>
         </div>
 
-        <div className="action-buttons">
-          <button className="btn btn-save" onClick={handleSave}>
-            <Save size={20} className="btn-icon" />
-            <span>Simpan ke Riwayat</span>
-          </button>
-          
-          <button className="btn btn-rescan" onClick={onBack}>
-            <Camera size={20} className="btn-icon" />
-            <span>Pindai Lagi</span>
-          </button>
-        </div>
+        {!isViewOnly && (
+          <div className="action-buttons">
+            <button className="btn btn-save" onClick={handleSave}>
+              <Save size={20} className="btn-icon" />
+              <span>Simpan ke Riwayat</span>
+            </button>
+            
+            <button className="btn btn-rescan" onClick={onBack}>
+              <Camera size={20} className="btn-icon" />
+              <span>Pindai Lagi</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

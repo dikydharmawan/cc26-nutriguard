@@ -1,9 +1,47 @@
+import { useState } from 'react';
 import { Clock, Search, ChevronRight } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
+import ScanResultView from './ScanResultView';
 import './HistoryView.css';
 
 const HistoryView = () => {
   const { history } = useAppContext();
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleViewDetail = (item) => {
+    if (item.fullData) {
+      setSelectedItem({
+        scanData: item.fullData,
+        image: item.image || item.imageUrl
+      });
+    } else {
+      setSelectedItem({
+        scanData: {
+          isValid: true,
+          productName: item.detected?.productName || item.name || 'Produk',
+          resultStatus: item.detected?.resultStatus || item.status || 'OK',
+          confidence: item.confidence ? `${(item.confidence * 100).toFixed(0)}%` : '99%',
+          statusIcon: 'ℹ️',
+          statusClass: 'status-safe-header',
+          probabilities: item.detected?.probabilities || { aman: '0%', amanVal: 0, waspada: '0%', waspadaVal: 0, batasi: '0%', batasiVal: 0 },
+          nutrients: item.detected?.nutrients || [],
+          aiSuggestion: item.detected?.aiSuggestion || 'Informasi detail tidak tersedia.'
+        },
+        image: item.imageUrl || null
+      });
+    }
+  };
+
+  if (selectedItem) {
+    return (
+      <ScanResultView
+        scanData={selectedItem.scanData}
+        scannedImage={selectedItem.image}
+        onBack={() => setSelectedItem(null)}
+        isViewOnly={true}
+      />
+    );
+  }
 
   return (
     <div className="history-view">
@@ -26,7 +64,7 @@ const HistoryView = () => {
           const color = item.detected?.statusColor || item.color || '#64746b';
           
           return (
-            <div key={item.id} className="history-card dashboard-card">
+            <div key={item.id} className="history-card dashboard-card" onClick={() => handleViewDetail(item)} style={{ cursor: 'pointer' }}>
               <div className="history-icon">
                 <Clock size={20} color="#64746b" />
               </div>

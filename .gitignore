@@ -11,6 +11,8 @@ lerna-debug.log*
 node_modules
 client/node_modules
 server/node_modules
+ai/.venv
+server/generated
 
 # Build output
 dist

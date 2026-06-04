@@ -9,12 +9,28 @@ export const AppProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
 
-  const [nutritionData, setNutritionData] = useState({
-    dailyGoal: { calorie: 2200, sugar: 50, sodium: 2000, hydration: 2.5 },
-    consumed: { calorie: 0, sugar: 0, sodium: 0, hydration: 0 }
+  const [nutritionData, setNutritionData] = useState(() => {
+    const saved = localStorage.getItem('nutritionData');
+    return saved ? JSON.parse(saved) : {
+      dailyGoal: { calorie: 2200, sugar: 50, sodium: 2000, hydration: 2.5 },
+      consumed: { calorie: 0, sugar: 0, sodium: 0, hydration: 0 }
+    };
   });
 
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem('scanHistory');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+
+
+  useEffect(() => {
+    localStorage.setItem('nutritionData', JSON.stringify(nutritionData));
+  }, [nutritionData]);
+
+  useEffect(() => {
+    localStorage.setItem('scanHistory', JSON.stringify(history));
+  }, [history]);
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -83,8 +99,19 @@ export const AppProvider = ({ children }) => {
       const res = await api.get('/logs');
       // Assume paginated list or array
       const logs = Array.isArray(res.data) ? res.data : (res.data.data || res.data.logs || []);
-      setHistory(logs);
-      calculateConsumed(logs);
+      
+      // Merge with local storage to prevent reset
+      const saved = localStorage.getItem('scanHistory');
+      const prevLocal = saved ? JSON.parse(saved) : [];
+      const combined = [...logs, ...prevLocal];
+      const unique = Array.from(new Map(combined.map(item => [item.id, item])).values());
+      unique.sort((a, b) => {
+        if (typeof a.id === 'number' && typeof b.id === 'number') return b.id - a.id;
+        return 0;
+      });
+
+      setHistory(unique);
+      calculateConsumed(unique);
     } catch (err) {
       console.error('Failed to fetch history', err);
     }
