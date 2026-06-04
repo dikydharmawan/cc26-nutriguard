@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_URL || 'https://persecute-reoccupy-tablet.ngrok-free.dev/api',
   headers: {
     'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true', // Important for ngrok free tier
   },
 });
 
