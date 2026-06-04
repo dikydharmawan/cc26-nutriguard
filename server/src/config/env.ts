@@ -9,6 +9,7 @@ export const env = cleanEnv(process.env, {
   PORT: num({ default: 3000 }),
   USE_STUB_PREDICTOR: bool({ default: true }), // true = stub, false = real TF model
   TF_MODEL_PATH: str({ default: "ml/model" }), // path to SavedModel dir
+  AI_SERVER_URL: str({ default: "http://localhost:8000" }), // URL to FastAPI AI server
   // Optional S3
   AWS_BUCKET: str({ default: "" }),
   AWS_REGION: str({ default: "us-east-1" }),

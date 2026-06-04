@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { env } from "../config/env";
 
 export const handleScan = async (
   req: Request,
@@ -22,7 +23,7 @@ export const handleScan = async (
     }
 
     // 2. Teruskan string Base64 ke server FastAPI
-    const aiResponse = await fetch("http://localhost:8000/api/v1/predict", {
+    const aiResponse = await fetch(`${env.AI_SERVER_URL}/api/v1/predict`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
