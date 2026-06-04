@@ -34,11 +34,15 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    if (token) {
+    if (token && token !== 'undefined' && token !== 'null') {
       setIsAuthenticated(true);
       const savedProfile = localStorage.getItem('userProfile');
-      if (savedProfile) {
-        setUserProfile(JSON.parse(savedProfile));
+      if (savedProfile && savedProfile !== 'undefined' && savedProfile !== 'null') {
+        try {
+          setUserProfile(JSON.parse(savedProfile));
+        } catch (e) {
+          console.error("Error parsing user profile from localStorage", e);
+        }
       } else {
         setUserProfile({
           name: 'Pengguna',
