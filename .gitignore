@@ -18,6 +18,7 @@ server/generated
 dist
 dist-ssr
 client/dist
+server/generated
 
 # Environment variables
 .env
@@ -36,3 +37,11 @@ client/.env
 *.njsproj
 *.sln
 *.sw?
+
+.direnv/
+
+# Python environment
+.venv
+
+# SQLite databases
+*.db
