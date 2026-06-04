@@ -3,6 +3,7 @@ allowBuilds:
   '@scarf/scarf': false
   '@tensorflow/tfjs-node': false
   argon2: false
+  better-sqlite3: set this to true or false
   core-js: false
   esbuild: set this to true or false
   prisma: true
