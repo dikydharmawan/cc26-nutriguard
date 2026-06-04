@@ -44,14 +44,34 @@ const ScannerView = ({ onNavigate }) => {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
       
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { 
-          facingMode: 'environment',
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false
-      });
+      let stream;
+      try {
+        // Attempt 1: High res environment camera
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            facingMode: 'environment',
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+          audio: false
+        });
+      } catch (e1) {
+        console.warn("Attempt 1 failed, trying fallback 1:", e1);
+        try {
+          // Attempt 2: Basic environment camera
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' },
+            audio: false
+          });
+        } catch (e2) {
+          console.warn("Attempt 2 failed, trying fallback 2:", e2);
+          // Attempt 3: Any camera
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+          });
+        }
+      }
       
       streamRef.current = stream;
       if (videoRef.current) {
@@ -64,7 +84,7 @@ const ScannerView = ({ onNavigate }) => {
       console.error("Camera access error:", err);
       setHasCamera(false);
       setCameraActive(false);
-      setCameraError(err.name === 'NotAllowedError' ? 'Izin kamera ditolak.' : 'Kamera tidak ditemukan atau tidak didukung.');
+      setCameraError(err.name === 'NotAllowedError' ? 'Izin kamera ditolak.' : `Kamera gagal dimuat (${err.name}).`);
     }
   };
 
