@@ -5,7 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
 function App() {
-  const { isAuthenticated, isAuthLoading } = useAppContext();
+  const { isAuthenticated, isAuthLoading, logout } = useAppContext();
   const [currentView, setCurrentView] = useState('login');
 
   useEffect(() => {
@@ -24,7 +24,7 @@ function App() {
     <>
       {currentView === 'register' && !isAuthenticated && <Register onSwitchToLogin={() => setCurrentView('login')} />}
       {currentView === 'login' && !isAuthenticated && <Login onSwitchToRegister={() => setCurrentView('register')} />}
-      {currentView === 'dashboard' && isAuthenticated && <Dashboard />}
+      {currentView === 'dashboard' && isAuthenticated && <Dashboard onLogout={logout} />}
     </>
   );
 }
