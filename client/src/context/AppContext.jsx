@@ -41,9 +41,9 @@ export const AppProvider = ({ children }) => {
         setUserProfile(JSON.parse(savedProfile));
       } else {
         setUserProfile({
-          name: 'Diky Dharmawan',
-          email: 'diky@example.com',
-          avatar: 'https://i.pravatar.cc/150?img=11',
+          name: 'Pengguna',
+          email: 'user@example.com',
+          avatar: 'https://ui-avatars.com/api/?name=Pengguna&background=random',
           age: 25,
           gender: 'Laki-laki',
           weight: 70,
@@ -64,25 +64,37 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('refreshToken', refreshToken);
     setIsAuthenticated(true);
     
+    const storedName = localStorage.getItem(`userName_${email}`);
+    const defaultName = storedName || email.split('@')[0].replace(/[^a-zA-Z0-9]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
     // Check if there is already a saved profile for this email, otherwise set default
     const savedProfile = localStorage.getItem('userProfile');
-    const profile = savedProfile ? JSON.parse(savedProfile) : {
-      name: 'Diky Dharmawan',
-      email,
-      avatar: 'https://i.pravatar.cc/150?img=11',
-      age: 25,
-      gender: 'Laki-laki',
-      weight: 70,
-      height: 175
-    };
+    let profile = savedProfile ? JSON.parse(savedProfile) : null;
+    
+    // If no profile or profile belongs to a different email, create a new one
+    if (!profile || profile.email !== email) {
+      profile = {
+        name: defaultName,
+        email,
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultName)}&background=random`,
+        age: 25,
+        gender: 'Laki-laki',
+        weight: 70,
+        height: 175
+      };
+    }
+    
     setUserProfile(profile);
     localStorage.setItem('userProfile', JSON.stringify(profile));
 
     await fetchHistory();
   };
 
-  const register = async (email, password) => {
+  const register = async (name, email, password) => {
     await api.post('/auth/register', { email, password });
+    if (name) {
+      localStorage.setItem(`userName_${email}`, name);
+    }
   };
 
   const logout = () => {

@@ -21,7 +21,7 @@ const Register = ({ onSwitchToLogin }) => {
     setSuccess('');
     setLoading(true);
     try {
-      await register(email, password); // Note: Backend currently only requires email & password
+      await register(name, email, password); // Pass name to be saved locally
       setSuccess('Pendaftaran berhasil! Silakan masuk.');
       setTimeout(() => {
         onSwitchToLogin();
