@@ -28,6 +28,9 @@ COPY --chown=user requirements.txt .
 # Instal dependensi Python
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+# Pre-download EasyOCR models (runs at build time to cache the model files)
+RUN python -c "import easyocr; reader = easyocr.Reader(['id', 'en'], gpu=False)"
+
 # Salin seluruh file project (main.py, nutriguard.keras, nutriguard_meta.pkl)
 COPY --chown=user . .
 

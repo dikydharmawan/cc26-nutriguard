@@ -23,6 +23,7 @@ export const handleScan = async (
     }
 
     // 2. Teruskan string Base64 ke server FastAPI
+    console.log("[ScanController] Forwarding scan to AI server at:", `${env.AI_SERVER_URL}/api/v1/predict`);
     const aiResponse = await fetch(`${env.AI_SERVER_URL}/api/v1/predict`, {
       method: "POST",
       headers: {
