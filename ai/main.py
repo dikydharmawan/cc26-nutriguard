@@ -73,9 +73,11 @@ NUTRITION_KEYS = [
 
 CATEGORIES = ['Aman', 'Waspada', 'Batasi']
 
+startup_error = None
+
 @app.on_event("startup")
 async def startup_event():
-    global model, scaler_mean, scaler_scale, median_imputation, reader
+    global model, scaler_mean, scaler_scale, median_imputation, reader, startup_error
     try:
         # Load EasyOCR
         reader = easyocr.Reader(['id', 'en'], gpu=False)
@@ -99,7 +101,9 @@ async def startup_event():
         )
         print("✅ Berhasil! Model, Metadata, dan EasyOCR dimuat dengan sukses tanpa error.")
     except Exception as e:
-        print(f"❌ Error kritis saat startup: {str(e)}")
+        import traceback
+        startup_error = f"Startup Error: {str(e)}\n{traceback.format_exc()}"
+        print(f"❌ Error kritis saat startup: {startup_error}")
 
 def extract_nutrition_values(text: str) -> dict:
     text = text.lower()
@@ -127,7 +131,13 @@ def extract_nutrition_values(text: str) -> dict:
 
 @app.post("/api/v1/predict")
 async def predict(request: ScanRequest):
+    if model is None:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Model is not loaded. Startup error was: {startup_error}"
+        )
     try:
+
         # Decode string Base64 dari BE menjadi bytes gambar murni
         try:
             encoded_data = request.image.split(",")[-1]
