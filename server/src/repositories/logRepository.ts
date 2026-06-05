@@ -26,7 +26,7 @@ export const findLogsByUser = async (
   page: number,
   pageSize: number,
 ): Promise<{ data: FoodLogRecord[]; total: number }> => {
-  const [data, total] = await prisma.$transaction([
+  const [data, total] = await Promise.all([
     prisma.foodLog.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
